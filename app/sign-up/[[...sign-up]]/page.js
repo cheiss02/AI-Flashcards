@@ -1,5 +1,7 @@
 import { AppBar, Container, Button, Toolbar, Typography, Box } from "@mui/material";
-import { SignIn} from "@clerk/nextjs";
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { SignUp } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function SignUpPage(){
@@ -9,12 +11,12 @@ export default function SignUpPage(){
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
                     Flashcard SaaS
                 </Typography>
-                <Button color="inherit">
-                    <Link href= "/sign-in" passHref>
+                <Button color="inherit" endIcon={<LoginIcon />}>
+                    <Link href= "/sign-in" passHref >
                     Login
                     </Link>
                 </Button>
-                <Button color="inherit">
+                <Button color="inherit" endIcon={<LogoutIcon />}>
                     <Link href= "/sign-up" passHref>
                     Sign Up
                     </Link>
@@ -27,8 +29,8 @@ export default function SignUpPage(){
         alignItems="center"
         justifyContent="center"
         >
-            <Typography variant="h4">Sign In</Typography>
-            <SignIn/>
+            <Typography variant="h4">Sign Up</Typography>
+            <SignUp/>
         </Box>
     </Container>
 }

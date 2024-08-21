@@ -17,8 +17,11 @@ export default function Home() {
         <Toolbar>
           <Typography variant="h6" style={{flexGrow: 1}}>Flashcard SaaS</Typography>
           <SignedOut>
-            <Button color="inherit">Login</Button>
-            <Button color="inherit">Sign Up</Button>
+            <Button color="inherit" href="/sign-in">
+            {' '}
+            Login
+            </Button>
+            <Button color="inherit" href="/sign-up">Sign Up</Button>
           </SignedOut>
           <SignedIn>
             <UserButton/>
@@ -36,7 +39,7 @@ export default function Home() {
           {' '}
           The easiest way to make flashcards from your text
           </Typography>
-          <Button variant="contained" color="primary" sx={{mt: 2}}> Get Started</Button>
+          <Button variant="contained" color="primary" sx={{mt: 2}} href="/generate"> Get Started</Button>
       </Box>
       <Box sx={{my: 6}}>
         <Typography variant="h4" components="h2" gutterBottom>

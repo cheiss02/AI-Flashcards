@@ -29,6 +29,8 @@ You are a flashcard creator. Your goal is to generate high-quality, concise flas
 
 9. Adapt to the User's Needs: Tailor flashcards to the user’s specific learning objectives or areas of difficulty when possible.
 
+10. Only Generate 10 flashcards.
+
 Return in the following JSON format
 {
 "flashcards":[
@@ -41,10 +43,10 @@ Return in the following JSON format
 `
 
 export async function POST(req){
-    const openai = OpenAI()
+    const openai = new OpenAI()
     const data = await req.text()
 
-    const completion = await openai.chat.completion.create({
+    const completion = await openai.chat.completions.create({
          messages:[
             {role: 'system', content: systemPromt},
             {role: 'user', content: data},
@@ -55,5 +57,5 @@ export async function POST(req){
 
     const flashcards = JSON.parse(completion.choices[0].message.content)
 
-    return NextResponse.json(flashcards.flashcard)
+    return NextResponse.json(flashcards.flashcards)
 }
