@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
 import { useRouter } from 'next/navigation'
-import { CardActionArea, CardContent, Container, Grid, Typography } from "@mui/material"
+import { CardActionArea, CardContent, Container, Grid, Typography, Card } from "@mui/material"
 
 export default function Flashcards() {
     const {isLoaded, isSignedIn, user} = useUser()
@@ -15,12 +15,10 @@ export default function Flashcards() {
 
     useEffect(() => {
         async function getFlashcards(){
-            if(!user){
-                console.log("User is not available");
-                return
-            } 
-            console.log("Fetching data for user ID:", user.id);
-            const docRef = doc(collection(db, "users"), user.id)
+            if(!user)
+                return;
+
+            const docRef = doc(collection(db, "user"), user.id)
             const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()){
@@ -37,14 +35,14 @@ export default function Flashcards() {
     }, [user] )
 
     if(!isLoaded || !isSignedIn){
-        return <><Typography>No autentication</Typography></>
+        return <></>
     }
 
     const handleCardClick = (id) =>{
         router.push(`/flashcard?id=${id}`)
     }
 
-    return
+    return (
         <Container maxWidth="100vw">
             <Grid 
             container 
@@ -56,7 +54,7 @@ export default function Flashcards() {
                     {flashcards.map((flashcard, index) => (
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <Card>
-                                <CardActionArea onClick={()=> {handleCardClick(id)}}>
+                                <CardActionArea onClick={()=> {handleCardClick(flashcard.name)}}>
                                     <CardContent>
                                             <Typography variant = "h6">
                                             {flashcard.name}
@@ -68,5 +66,6 @@ export default function Flashcards() {
                 ))}
             </Grid>
         </Container>
+    )
     
 }
