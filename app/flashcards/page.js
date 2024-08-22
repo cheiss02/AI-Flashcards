@@ -6,25 +6,30 @@ import { useEffect, useState } from "react"
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '@/firebase'
 import { useRouter } from 'next/navigation'
-import router from "express/lib/router"
-import { CardActionArea, CardContent, Container, Grid } from "@mui/material"
+import { CardActionArea, CardContent, Container, Grid, Typography } from "@mui/material"
 
-export default function Flashcards(){
+export default function Flashcards() {
     const {isLoaded, isSignedIn, user} = useUser()
     const [flashcards, setFlashcards] = useState([])
     const router = useRouter()
 
     useEffect(() => {
         async function getFlashcards(){
-            if(!user) return
+            if(!user){
+                console.log("User is not available");
+                return
+            } 
+            console.log("Fetching data for user ID:", user.id);
             const docRef = doc(collection(db, "users"), user.id)
             const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()){
             const collections = docSnap.data().flashcards || []
+            console.log('Fetched flashcards:', collections);
             setFlashcards(collections)
         }
         else{
+            console.log('Document does not exist, initializing with empty flashcards array');
             await setDoc(docRef, {flashcards: [] })
         }
     }
@@ -32,17 +37,17 @@ export default function Flashcards(){
     }, [user] )
 
     if(!isLoaded || !isSignedIn){
-        return <></>
+        return <><Typography>No autentication</Typography></>
     }
 
     const handleCardClick = (id) =>{
         router.push(`/flashcard?id=${id}`)
     }
 
-    return(
+    return
         <Container maxWidth="100vw">
             <Grid 
-            conteiner 
+            container 
             spacing = {3} 
             sx={
                 {mt: 4,
@@ -52,11 +57,16 @@ export default function Flashcards(){
                         <Grid item xs={12} sm={6} md={4} key={index}>
                             <Card>
                                 <CardActionArea onClick={()=> {handleCardClick(id)}}>
-                                    <CardContent variant = "h6"> {flashcard.name} </CardContent>
+                                    <CardContent>
+                                            <Typography variant = "h6">
+                                            {flashcard.name}
+                                            </Typography>  
+                                    </CardContent>
                                 </CardActionArea>
-                            </Card></Grid>
+                            </Card>
+                            </Grid>
                 ))}
             </Grid>
         </Container>
-    )
+    
 }
